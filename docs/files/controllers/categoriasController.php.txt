@@ -1,0 +1,98 @@
+<?php  
+
+/**
+ * @author Julio Guevara
+ * @version 1.0
+ */
+
+	/** 
+	 * Class categoriasController
+	 * @package App\Controller
+	 */
+	
+
+	class categoriasController extends AppController
+	{
+		public function __construct()
+		{
+			parent::__construct();
+		}
+
+
+		/**
+		 * Index de la aplicación
+		 *  @return mixed|void
+		 *
+		 */
+		public function index()
+		{
+			/** @var CategoriaModel $categorias */
+			$categorias = $this->loadModel("categoria");
+			$this->_view->categorias=$categorias->getCategorias();
+			$this->_view->titulo="Pagina principal";
+			$this->_view->renderizar("index");
+		}
+
+		 /**
+          * Esta función agrega una nueva categoría
+          *
+          * Agrega una nueve categoría con los datos ingresados
+          *
+          */
+		public function agregar()
+		{	/** @var CategoriaModel $categorias */
+			if($_POST)
+			{	
+				$categoria = $this->loadModel("categoria");
+				$categoria->add($_POST);
+				$this->redirect(array("controller"=>"categorias"));
+			}
+			$this->_view->titulo="Nueva Tarea";
+			$this->_view->renderizar("agregar");
+		}
+
+		
+		 /**
+    	  * Editar una categoria
+    	  *
+    	  * Esta funcion edita una categoría mediante el reemplazo de los datos 
+    	  * que se encuentran en la base de datos.
+    	  *
+    	  */
+		public function editar($id=null)
+		{
+			if($_POST)
+			{
+				$categoria = $this->loadModel("categoria");
+				$categoria->update($_POST);
+				$this->redirect(array("controller"=>"categorias"));
+			}
+			$categoria = $this->loadModel("categoria");
+			$this->_view->categoria=$categoria->find($id);
+			$this->_view->titulo="Editar Tarea";
+			$this->_view->renderizar("editar");
+		}
+
+    	/**
+        * Elimina una categoria.
+        *
+        * Permite eliminar una categoria del sistema.
+        *
+        */
+		public function eliminar($id = null)
+		{
+
+		/**
+         * @var CategoriaModel $categoria
+         */
+			$categoria = $this->loadModel("categoria");
+			$item = $categoria->find($id);
+			print_r($item);
+			if($item)
+			{
+				$categoria->delete($id);
+				$this->redirect(array("controller"=>"categorias"));
+			}
+		}
+	}
+?>

@@ -1,0 +1,127 @@
+
+<center><h2>Lista de tareas</h2></center>
+
+
+
+<nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="<?php echo APP_URL."tareas/index"; ?>">Lista de Tareas</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <!-- left navigation links -->
+      <ul class="navbar-nav mr-auto">
+
+        <!-- active navigation link -->
+        <li class="nav-item active">
+          <a class="nav-link" href="<?php echo APP_URL."tareas/index"; ?>">Tareas
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+
+        <!-- regular navigation link -->
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo APP_URL."categorias/index"; ?>">Categorías</a>
+        </li>
+
+        <!-- more navigation links -->
+
+      </ul>
+
+      <!-- right navigation link -->
+    </div>
+  </div>
+</nav>
+
+
+
+	<div class="col-md-12 text-left">
+			<a href="<?php echo APP_URL."tareas/agregar"; ?>">
+				<button type="button" class="btn btn-primary"> 
+					<i class="fa fa-plus"></i>
+					Agregar nueva tarea
+				</button>
+			</a>
+		</div>
+
+<div class="container">
+<div class="col-md-12 mg-top-10">
+	<table class="table table-sm">
+		<thead class="thead-light">
+	<tr>
+		<th>ID</th>
+		<th>Nombre</th>
+		<th>Descripción</th>
+		<th>Fecha</th>
+		<th>Prioridad</th>
+		<th>Status</th>
+		<th>Categoria</th>
+		<th>Acción</th>
+	</tr>
+</thead>
+<?php if ($this->tareas): ?>
+<?php foreach ($this->tareas as $tarea): ?>
+	<tr>
+		<td><?php echo $tarea["tareas"]["id"]; ?></td>
+		<td><?php echo $tarea["tareas"]["nombre"]; ?></td>
+		<td><?php echo $tarea["tareas"]["descripcion"]; ?></td>
+		<td><?php $date = date_create($tarea["tareas"]["fecha"]); 
+			echo date_format($date, 'd/m/y'); 
+			?></td>
+		<td>
+		<?php if ($tarea["tareas"]["prioridad"]<=3) {
+			echo "Baja"; 
+		}else if ($tarea["tareas"]["prioridad"]<=6) {
+			echo "Media";
+		}else if ($tarea["tareas"]["prioridad"]<=10) {
+			echo "Alta";
+		}
+		?>
+		</td>
+		<td><?php echo $tarea["tareas"]["estatus"]; ?></td>
+		<td><?php echo $tarea["categorias"]["nombre"]; ?></td>
+		<td>
+
+			
+			<a href="<?php echo APP_URL."tareas/editar/".$tarea["tareas"]["id"]; ?>">
+				<button type="button" class="btn btn-success"> 
+					<i class="fa fa-plus"></i>
+				editar
+				</button>
+			</a>
+			<a href="<?php echo APP_URL."tareas/eliminar/".$tarea["tareas"]["id"]; ?>">
+				<button type="button" class="btn btn-danger"> 
+					<i class="fa fa-plus"></i>
+				eliminar
+				</button>
+			</a>
+		
+		<?php
+			if ($tarea["tareas"]["estatus"]==1) { ?>
+				<a href="<?php echo APP_URL."tareas/cambiarEstado/".$tarea["tareas"]["id"]."/0"; ?>">
+				<button type="button" class="btn btn-light"> 
+					<i class="fa fa-plus"></i>
+				Deshabilitar
+				</button>
+			</a>
+			
+		<?php }elseif($tarea["tareas"]["estatus"]==0){ ?>
+						<a href="<?php echo APP_URL."tareas/cambiarEstado/".$tarea["tareas"]["id"]."/1"; ?>">
+				<button type="button" class="btn btn-dark"> 
+					<i class="fa fa-plus"></i>
+				Habilitar
+				</button>
+			</a>
+
+		
+		<?php } ?>
+		</td>
+		
+	</tr>
+<?php endforeach; ?>
+<?php endif; ?>
+
+</table>
+</div>
+</div>
